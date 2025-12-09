@@ -76,14 +76,53 @@ Code using JdbcTemplate implements callback interfaces with clearly defined cont
 
 ## Configuration Options
 
-### Direct Instantiation
-```java
-JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-```
 
-### Spring IoC Container (Recommended)
+
+### Spring IoC Container (Recommended over direct instantiation that's not covered here)
 - Configure DataSource as a bean
+```java
+@Configuration  
+public class DataSourceConfiguration {
+	@Bean  
+
+	JdbcTemplate jdbcTemplate(DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
+	}
+```    
 - Inject JdbcTemplate into DAOs as a bean reference
+```java
+@Repository
+public class CountryDaoImpl implements CountryDao {
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+
+	@Override
+	public List<Country> getAllCountries(){
+		String sql = "SELECT id, name FROM country";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Country.class));
+	}
+}
+```
+- Call it from the controller:_notice that here we've calling the interface but Spring will inject its implementation_, `CountryDaoImpl`
+```java
+@Controller
+public class MainController {
+
+	@Autowired
+	private CountryDao countryDao;
+	
+
+	@GetMapping("/test")
+	public String getForm() {
+		List<Country> countries = countryDao.getAllCountries();
+		System.out.println("**countries** " + countries);
+		return "demo";  //demo.jsp
+
+	}
+}
+```
 - Allows sharing a single thread-safe instance across multiple DAOs
 
 ## Important Notes
