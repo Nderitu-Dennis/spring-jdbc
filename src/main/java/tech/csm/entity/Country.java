@@ -12,4 +12,6 @@ public class Country implements Serializable {
 	private Integer id;
 	
 	private String name;
+	
+	//notice there;s no @Entity
 }

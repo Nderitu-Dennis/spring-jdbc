@@ -21,7 +21,50 @@ public class CountryDaoImpl implements CountryDao {
 	public List<Country> getAllCountries(){		
 		String sql = "SELECT id, name FROM country";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Country.class));
+
 	}
+	
+	  public int countCountries() {
+	        String sql = "SELECT count(*) FROM country";
+	        return jdbcTemplate.queryForObject(sql, Integer.class);
+	    }
+
+	  @Override
+	  public Country getCountryById(Integer id) {
+	      String sql = "SELECT id, name FROM country WHERE id = ?";
+	      return jdbcTemplate.queryForObject(
+	              sql,
+	              new BeanPropertyRowMapper<>(Country.class),
+	              id
+	      );
+	  }
+
+	  @Override
+	  public int addCountry(String name) {
+	        String sql = "INSERT INTO country (name) VALUES (?)";
+	        return jdbcTemplate.update(sql, name);
+	    }
+
+	  @Override
+	  public int deleteCountryById(Integer id) {
+		  String sql = "DELETE FROM country WHERE id = ?";
+	        return jdbcTemplate.update(sql, id);
+	  }
+
+	  @Override
+	   public int updateCountry(Integer id, String name) {
+	        String sql = "UPDATE country SET name = ? WHERE id = ?";
+	        return jdbcTemplate.update(sql, name, id);
+	    }
+
+	  
+ 
+	  
+	
+	  
+	  
+	
+
 }
 
 //	Country country= jdbcTemplate.queryForObject(

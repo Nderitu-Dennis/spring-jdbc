@@ -105,7 +105,7 @@ public class CountryDaoImpl implements CountryDao {
 	}
 }
 ```
-- Call it from the controller:_notice that here we've calling the interface but Spring will inject its implementation_, `CountryDaoImpl`
+- Call it from the controller:_notice that here we're calling the interface but Spring will inject its implementation_, `CountryDaoImpl`
 ```java
 @Controller
 public class MainController {
