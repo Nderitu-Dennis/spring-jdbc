@@ -5,21 +5,21 @@ import javax.sql.DataSource;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
-@Configuration
+/*
+ * You don’t even need to define a DataSource bean manually;
+ *  Spring Boot auto-configures it from application.properties.
+ *  Here we just create a JdbcTemplate bean that uses the auto-configured DataSource.
+
+ */
+
+@Configuration  // Tells Spring this class contains bean definitions
 public class DataSourceConfiguration {
-	@Bean
-	public DataSource getDataSource() {
-		DataSourceBuilder db = DataSourceBuilder.create();
-		db.driverClassName("com.mysql.cj.jdbc.Driver");
-		db.url("jdbc:mysql://localhost:3306/csex_db");
-		db.username("root");
-		db.password("root");
-		return db.build();
-	}
-	@Bean
-	public String getStringName() {
-		return "hi from Spring JDBC...:";
+	@Bean  //This method returns an object that should be managed by the Spring IoC container
+	
+	JdbcTemplate jdbcTemplate(DataSource dataSource) {
+		return new JdbcTemplate(dataSource);
 	}
 	
 	
